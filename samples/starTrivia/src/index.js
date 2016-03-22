@@ -69,7 +69,7 @@ var questions = [
         ]
     },
     {
-        "What is the name of NASA’s most famous space telescope?": [
+        "What is the name of NASAs most famous space telescope?": [
             "Hubbel",
             "Rubble",
             "Trouble",
