@@ -21,7 +21,7 @@
 /**
  * App ID for the skill
  */
-var APP_ID = undefined; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
+var APP_ID = amzn1.echo-sdk-ams.app.eb15c293-e8ea-4982-a4f4-f150c51af6b2; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
 
 /**
  * Array containing car facts.
