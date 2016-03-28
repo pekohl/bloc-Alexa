@@ -58,6 +58,7 @@ var CAR_FACTS = [
     "Roads were first made for bicyclists, not cars."
 
 
+
 ];
 
 /**

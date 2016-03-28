@@ -243,7 +243,7 @@ var questions = [
             "Yukon Cornelius",
             "Slider Sam",
             "Bumble",
-            "Jack"
+CarFacts-            "Jack"
         ]
     },
     {
