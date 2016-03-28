@@ -21,229 +21,247 @@
  */
 var questions = [
     {
-        "What is the closest planet to the Sun?": [
-            "Mercury",
-            "Venus",
-            "Earth",
-            "Mars"
+        "Reindeer have very thick coats, how many hairs per square inch do they have?": [
+            "13,000",
+            "1,200",
+            "5,000",
+            "700",
+            "1,000",
+            "120,000"
         ]
     },
     {
-        "What is the name of the biggest planet in our solar system?": [
-            "Jupiter",
-            "Saturn",
-            "Earth",
-            "Uranus"
+        "The 1964 classic Rudolph The Red Nosed Reindeer was filmed in:": [
+            "Japan",
+            "United States",
+            "Finland",
+            "Germany"
         ]
     },
     {
-        "What is the hottest planet in our solar system?": [
-            "Mercury",
-            "Venus",
-            "Mars",
-            "Saturn"
+        "Santas reindeer are cared for by one of the Christmas elves, what is his name?": [
+            "Wunorse Openslae",
+            "Alabaster Snowball",
+            "Bushy Evergreen",
+            "Pepper Minstix"
         ]
     },
     {
-        "What planet is famous for its big red spot on it?": [
-            "Jupiter",
-            "Mars",
-            "Saturn",
-            "Venus"
+        "If all of Santas reindeer had antlers while pulling his Christmas sleigh, they would all be:": [
+            "Girls",
+            "Boys",
+            "Girls and boys",
+            "No way to tell"
         ]
     },
     {
-        "What planet is famous for the beautiful rings that surround it?": [
-            "Saturn",
-            "Jupiter",
-            "Pluto",
-            "Uranus"
+        "What do Reindeer eat?": [
+            "Lichen",
+            "Grasses",
+            "Leaves",
+            "Berries"
         ]
     },
     {
-        "Who was the first person to walk on the moon?": [
-            "Neil Armstrong",
-            "Michael Jackson",
-            "Justin Timberlake",
-            "Elon Musk"
+        "What of the following is not true?": [
+            "Caribou live on all continents",
+            "Both reindeer and Caribou are the same species",
+            "Caribou are bigger than reindeer",
+            "Reindeer live in Scandinavia and Russia"
         ]
     },
     {
-        "What is the name of NASAs most famous space telescope?": [
-            "Hubbel",
-            "Rubble",
-            "Trouble",
-            "Bubble"
+        "In what year did Rudolph make his television debut?": [
+            "1964",
+            "1979",
+            "2000",
+            "1956"
         ]
     },
     {
-        "Earth is located in which galaxy?": [
-            "The Milky Way galaxy",
-            "The Milkshake galaxy",
-            "The Snickers galaxy",
-            "Hogwart's galaxy"
+        "Who was the voice of Rudolph in the 1964 classic?": [
+            "Billie Mae Richards",
+            "Burl Ives",
+            "Paul Soles",
+            "Lady Gaga"
         ]
     },
     {
-        "What is the name of the first satellite sent into space?": [
-            "Sputnik",
-            "The Enterprise",
-            "Gandalf",
-            "Albert"
+        "In 1939 what retailer used the story of Rudolph the Red Nose Reindeer?": [
+            "Montgomery Ward",
+            "Sears",
+            "Macys",
+            "Kmart"
         ]
     },
     {
-        "Which planet is Olympus Mons on?": [
-            "Mars",
-            "Earth",
-            "Venus",
-            "Mercury"
+        "Santa's reindeer named Donner was originally named what?": [
+            "Dunder",
+            "Donny",
+            "Dweedle",
+            "Dreamy"
         ]
     },
     {
-        "How long does it take for light to go to the moon and back?": [
-            "3 seconds",
-            "10 seconds",
-            "13 seconds",
-            "20 seconds"
+        "Who invented the story of Rudolph?": [
+            "Robert May",
+            "Johnny Marks",
+            "Santa",
+            "J.K. Rowling"
         ]
     },
     {
-        "How long does it take for light to travel from the Sun to the Earth?": [
-            "8 Minutes",
-            "3 minutes",
-            "10 Minutes",
-            "15 Minutes"
+        "In what location will you not find reindeer?": [
+            "North Pole",
+            "Lapland",
+            "Korvatunturi mountain",
+            "Finland"
         ]
     },
     {
-        "How old is the Earth?": [
-            "4.5 billion years",
-            "4.5 Million years",
-            "4.5 trillion years",
-            "1 million years"
+        "What Makes Santa's Reindeer Fly?": [
+            "Magical Reindeer Dust",
+            "Fusion",
+            "Amanita muscaria",
+            "Elves"
         ]
     },
     {
-        "How old is our galaxy?": [
-            "13 billion years",
-            "13 trillion years",
-            "13 million years",
-            "3 million years"
+        "Including Rudolph, how many reindeer hooves are there?": [
+            "36",
+            "24",
+            "16",
+            "8"
         ]
     },
     {
-        "What’s the nearest solar system to our own?": [
-            "Alpha Centauri",
-            "Ursa Minor",
-            "Ursa Major",
-            "Apollo"
+        "Santa only has one female reindeer. Which one is it?": [
+            "Vixen",
+            "Clarice",
+            "Cupid",
+            "Cupid"
         ]
     },
     {
-        "How many light years away is Alpha Centauri?": [
-            "4.3",
-            "1.5",
-            "14.3",
-            "12.5"
+        "In the 1964 classic Rudolph The Red Nosed Reindeer, what was the snowman narrators name?": [
+            "Sam",
+            "Frosty",
+            "Burl",
+            "Snowy"
         ]
     },
     {
-        "What year did we first land on the moon?": [
-            "nineteen sixty-nine",
-            "nineteen fifty-nine",
-            "nineteen sixty-four",
-            "nineteen eighty"
+        "What was Rudolph's father's name?": [
+            "Donner",
+            "Dasher",
+            "Blixen",
+            "Comet"
         ]
     },
     {
-        "What year was the last manned mission to the moon?": [
-            "nineteen seventy-two",
-            "nineteen sixty-nine",
-            "nineteen ninety-four",
-            "nineteen eighty"
+        "In the 1964 movie, What was the name of the coach of the Reindeer Games?": [
+            "Comet",
+            "Blixen",
+            "Donner",
+            "Dasher"
         ]
     },
     {
-        "Which planet is covered by sulphuric acid?": [
-            "Venus",
-            "Neptune",
-            "Jupiter",
-            "Pluto"
+        "In the 1964 movie, what is the name of the deer that Rudolph befriends at the reindeer games?": [
+            "Fireball",
+            "Clarice",
+            "Jumper",
+            "Vixen"
         ]
     },
     {
-        "How long would it take a manned mission to reach Mars?": [
-            "6 months",
-            "1 year",
-            "3 years",
-            "10 years"
+        "In the 1964 movie, How did Donner, Rudolph's father, try to hide Rudolph's nose?": [
+            "Black mud",
+            "Bag",
+            "Pillow case",
+            "Sock"
         ]
     },
     {
-        "How many moons does Jupiter have?": [
-            "67",
-            "1",
-            "3",
-            "10"
+        "In the 1964 movie, what does the Misfit Elf want to be instead of a Santa Elf?": [
+            "Dentist",
+            "Reindeer",
+            "Toy maker",
+            "Candlestick maker"
         ]
     },
     {
-        "Which planet has a day which lasts eight months?": [
-            "Venus",
-            "Neptune",
-            "Mars",
-            "Saturn"
+        "In the 1964 movie,what was the Bumble's one weakness?": [
+            "Could not swim",
+            "Always hungry",
+            "Candy canes",
+            "Cross eyed"
         ]
     },
     {
-        "What is an area of space that is so dense that light cannot escape?": [
-            "Black Hole",
-            "White Dwarf",
-            "Red Nebula",
-            "Big Bang"
+        "In the 1964 movie, what is Yukon Cornelius really in search of?": [
+            "Peppermint",
+            "Gold",
+            "India",
+            "Polar Bears"
         ]
     },
     {
-        "What shape is the Milky Way?": [
-            "Sprial",
-            "Rectangle",
-            "Square",
-            "Triangle"
-        ]
-    },
-     {
-        "Which is the brightest comet in the solar system?": [
-            "Halley's Comet",
-            "Hale-Bopp Comet",
-            "Franks's Comet",
-            "Shoemaker-Levy Comet"
+        "In the 1964 movie, why is the train on the Island of Misfit Toys?": [
+            "Square wheels",
+            "No Engine",
+            "Paint does not match",
+            "It does not toot"
         ]
     },
     {
-        "Which planet is closest to the Earth?": [
-            "Mercury",
-            "Mars",
-            "Venus",
-            "The moon"
+        "In the 1964 movie, what is the name of the Jack in the Box?": [
+            "Charlie",
+            "Sam",
+            "Billy",
+            "Jack"
         ]
     },
     {
-        "How long does it take the Moon to orbit the Earth?": [
-            "27 days",
-            "30 days",
-            "45 days",
-            "35 days"
+        "In the 1964 movie, why did Santa Claus almost cancel Christmas?": [
+            "Storm",
+            "No snow",
+            "No toys",
+            "The Reindeer were sick"
         ]
     },
     {
-        "How far is the edge of space from the Earth's surface?": [
-            "62 miles",
-            "52 miles",
-            "100 miles",
-            "1000 miles"
+        "In the 1964 movie, what animal noise did the elf make to distract the Bumble?": [
+            "Oink",
+            "Growl",
+            "Bark",
+            "Meow"
         ]
     },
+    {
+        "In the 1964 movie, what is the name of the prospector?": [
+            "Yukon Cornelius",
+            "Slider Sam",
+            "Bumble",
+CarFacts-            "Jack"
+        ]
+    },
+    {
+        "How far do reindeer travel when they migrate?": [
+            "3000 miles",
+            "700 miles",
+            "500 miles",
+            "0 miles"
+        ]
+    },
+    {
+        "How fast can a reindeer run?": [
+            "48 miles per hour",
+            "17 miles per hour",
+            "19 miles per hour",
+            "14 miles per hour"
+        ]
+    }
 ];
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -257,9 +275,9 @@ exports.handler = function (event, context) {
          * prevent someone else from configuring a skill that sends requests to this function.
          */
 
-     if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.8425453a-b45d-4df9-9198-c8f0212f3d0b") {
-         context.fail("Invalid Application ID");
-      }
+//     if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.05aecccb3-1461-48fb-a008-822ddrt6b516") {
+//         context.fail("Invalid Application ID");
+//      }
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
@@ -367,11 +385,11 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 var ANSWER_COUNT = 4;
 var GAME_LENGTH = 5;
-var CARD_TITLE = "Star Trivia"; // Be sure to change this for your skill.
+var CARD_TITLE = "Reindeer Games"; // Be sure to change this for your skill.
 
 function getWelcomeResponse(callback) {
     var sessionAttributes = {},
-        speechOutput = "Star Trivia. I will ask you " + GAME_LENGTH.toString()
+        speechOutput = "Reindeer Games. I will ask you " + GAME_LENGTH.toString()
             + " questions, try to get as many right as you can. Just say the number of the answer. Let's begin. ",
         shouldEndSession = false,
 
