@@ -165,13 +165,85 @@ var questions = [
         ]
     },
     {
+        "Which planet is covered by sulphuric acid?": [
+            "Venus",
+            "Neptune",
+            "Jupiter",
+            "Pluto"
+        ]
+    },
+    {
         "How long would it take a manned mission to reach Mars?": [
             "6 months",
             "1 year",
             "3 years",
             "10 years"
         ]
-    }
+    },
+    {
+        "How many moons does Jupiter have?": [
+            "67",
+            "1",
+            "3",
+            "10"
+        ]
+    },
+    {
+        "Which planet has a day which lasts eight months?": [
+            "Venus",
+            "Neptune",
+            "Mars",
+            "Saturn"
+        ]
+    },
+    {
+        "What is an area of space that is so dense that light cannot escape?": [
+            "Black Hole",
+            "White Dwarf",
+            "Red Nebula",
+            "Big Bang"
+        ]
+    },
+    {
+        "What shape is the Milky Way?": [
+            "Sprial",
+            "Rectangle",
+            "Square",
+            "Triangle"
+        ]
+    },
+     {
+        "Which is the brightest comet in the solar system?": [
+            "Halley's Comet",
+            "Hale-Bopp Comet",
+            "Franks's Comet",
+            "Shoemaker-Levy Comet"
+        ]
+    },
+    {
+        "Which planet is closest to the Earth?": [
+            "Mercury",
+            "Mars",
+            "Venus",
+            "The moon"
+        ]
+    },
+    {
+        "How long does it take the Moon to orbit the Earth?": [
+            "27 days",
+            "30 days",
+            "45 days",
+            "35 days"
+        ]
+    },
+    {
+        "How far is the edge of space from the Earth's surface?": [
+            "62 miles",
+            "52 miles",
+            "100 miles",
+            "1000 miles"
+        ]
+    },
 ];
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
