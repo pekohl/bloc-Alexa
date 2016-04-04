@@ -1,0 +1,16 @@
+GetStockQuoteIntent get quote for {Symbol}
+GetStockQuoteIntent give me quote for {Symbol}
+GetStockQuoteIntent quote for {Symbol}
+GetStockQuoteIntent give me a quote for {Symbol}
+GetStockQuoteIntent what's the price of {Symbol}
+GetStockQuoteIntent {Symbol}
+
+GetNextQuoteIntent yes
+GetNextQuoteIntent yup
+GetNextQuoteIntent sure
+GetNextQuoteIntent yes please
+
+AMAZON.StopIntent no
+AMAZON.StopIntent nope
+AMAZON.StopIntent no thanks
+AMAZON.StopIntent no thank you
