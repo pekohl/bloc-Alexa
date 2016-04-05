@@ -57,8 +57,9 @@ var paginationSize = 3;
 
 /**
  * Variable defining the length of the delimiter between events
+ Used in Parse function, which we are not using.
  */
-var delimiterSize = 2;
+//var delimiterSize = 2;
 
 /**
  * HistoryBuffSkill is a child of AlexaSkill.
@@ -96,11 +97,11 @@ StockQuoteSkill.prototype.eventHandlers.onSessionEnded = function (sessionEndedR
 StockQuoteSkill.prototype.intentHandlers = {
 
     "GetStockQuoteIntent": function (intent, session, response) {
-        handleFirstEventRequest(intent, session, response);
+        handleFirstQuoteRequest(intent, session, response);
     },
 
     "GetNextQuoteIntent": function (intent, session, response) {
-        handleNextEventRequest(intent, session, response);
+        handleNextQuoteRequest(intent, session, response);
     },
 
     "AMAZON.HelpIntent": function (intent, session, response) {
@@ -164,6 +165,7 @@ function getWelcomeResponse(response) {
  */
 function handleFirstQuoteRequest(intent, session, response) {
     var stockSlot = intent.slots.stockSymbol;
+    console.log('intent.slots.stockSymbol: ' = stockSlot)
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 //    var monthNames = ["January", "February", "March", "April", "May", "June",
 //                      "July", "August", "September", "October", "November", "December"
@@ -181,17 +183,17 @@ function handleFirstQuoteRequest(intent, session, response) {
 //        date = new Date();
 //    }
 
-    var prefixContent = "<p>For " + monthNames[date.getMonth()] + " " + date.getDate() + ", </p>";
-    var cardContent = "For " + monthNames[date.getMonth()] + " " + date.getDate() + ", ";
+    var prefixContent = "<p>For ticker: " + symbol + ", </p>";
+    var cardContent = "For ticker:  " + symbol + ", ";
 
     var cardTitle = "Current Price for: " + symbol;
 
-    getJsonEventsFromGoogle(stockSymbol, function (priceDetails) {
+    getJsonQuoteFromgoogle(stockSlot, function (priceDetails) {
         var speechText = "",
             i;
-        sessionAttributes.text = priceDetails;
-        session.attributes = sessionAttributes;
-        if (events.length == 0) {
+//        sessionAttributes.text = priceDetails;
+//        session.attributes = sessionAttributes;
+        if (priceDetails.length == 0) {
             speechText = "There is a problem connecting to Google at this time. Please try again later.";
             cardContent = speechText;
             response.tell(speechText);
@@ -258,7 +260,7 @@ function handleNextQuoteRequest(intent, session, response) {
 
 function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
     var url = urlPrefix + stockSymbol;
-
+    console.log('getJsonQuoteFromgoogle called - ' + url);
     https.get(url, function(res) {
         var body = '';
 
@@ -267,46 +269,49 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
         });
 
         res.on('end', function () {
-            var stringResult = parseJson(body);
-            eventCallback(stringResult);
+            var priceDetails = JSON.parse(body);
+            console.log('priceDetails JSON parse: ' + priceDetails);
+//            var stringResult = parseJson(body);
+
+            eventCallback(priceDetails);
         });
     }).on('error', function (e) {
-        console.log("Got error: ", e);
+        console.log("Got error in getJsonQuoteFromgoogle: ", e);
     });
 }
-
-function parseJson(inputText) {
-    // sizeOf (/nEvents/n) is 10
-    var text = inputText.substring(inputText.indexOf("\\nEvents\\n")+10, inputText.indexOf("\\n\\n\\nBirths")),
-        retArr = [],
-        retString = "",
-        endIndex,
-        startIndex = 0;
-
-    if (text.length == 0) {
-        return retArr;
-    }
-
-    while(true) {
-        endIndex = text.indexOf("\\n", startIndex+delimiterSize);
-        var eventText = (endIndex == -1 ? text.substring(startIndex) : text.substring(startIndex, endIndex));
-        // replace dashes returned in text from Wikipedia's API
-        eventText = eventText.replace(/\\u2013\s*/g, '');
-        // add comma after year so Alexa pauses before continuing with the sentence
-        eventText = eventText.replace(/(^\d+)/,'$1,');
-        eventText = 'In ' + eventText;
-        startIndex = endIndex+delimiterSize;
-        retArr.push(eventText);
-        if (endIndex == -1) {
-            break;
-        }
-    }
-    if (retString != "") {
-        retArr.push(retString);
-    }
-    retArr.reverse();
-    return retArr;
-}
+// do I really need this?
+//function parseJson(inputText) {
+//    // sizeOf (/nEvents/n) is 10
+//    var text = inputText.substring(inputText.indexOf("\\nEvents\\n")+10, inputText.indexOf("\\n\\n\\nBirths")),
+//        retArr = [],
+//        retString = "",
+//        endIndex,
+//        startIndex = 0;
+//
+//    if (text.length == 0) {
+//        return retArr;
+//    }
+//
+//    while(true) {
+//        endIndex = text.indexOf("\\n", startIndex+delimiterSize);
+//        var eventText = (endIndex == -1 ? text.substring(startIndex) : text.substring(startIndex, endIndex));
+//        // replace dashes returned in text from Wikipedia's API
+//        eventText = eventText.replace(/\\u2013\s*/g, '');
+//        // add comma after year so Alexa pauses before continuing with the sentence
+//        eventText = eventText.replace(/(^\d+)/,'$1,');
+//        eventText = 'In ' + eventText;
+//        startIndex = endIndex+delimiterSize;
+//        retArr.push(eventText);
+//        if (endIndex == -1) {
+//            break;
+//        }
+//    }
+//    if (retString != "") {
+//        retArr.push(retString);
+//    }
+//    retArr.reverse();
+//    return retArr;
+//}
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
