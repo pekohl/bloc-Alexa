@@ -1,0 +1,25 @@
+{
+  "intents": [
+    {
+      "intent": "GetStockQuoteIntent",
+      "slots": [
+        {
+          "name": "stockSymbol",
+          "type": "AMAZON.LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "GetNextQuoteIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

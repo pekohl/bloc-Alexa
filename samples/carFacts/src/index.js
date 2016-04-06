@@ -21,7 +21,7 @@
 /**
  * App ID for the skill
  */
-var APP_ID = undefined; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
+var APP_ID = "amzn1.echo-sdk-ams.app.eb15c293-e8ea-4982-a4f4-f150c51af6b2";
 
 /**
  * Array containing car facts.
@@ -56,8 +56,6 @@ var CAR_FACTS = [
     "A car was created that is fueled by cappuccino as an attempt at creating a renewable energy source. The car system converts used coffee grounds to flammable gas. It takes 56 espressos to fuel one mile in the car-puccino.",
     "The world’s most profitable car manufacturer is Porsche.",
     "Roads were first made for bicyclists, not cars."
-
-
 
 ];
 
