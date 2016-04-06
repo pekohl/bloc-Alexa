@@ -5,7 +5,7 @@
       "slots": [
         {
           "name": "stockSymbol",
-          "type": "string"
+          "type": "AMAZON.LITERAL"
         }
       ]
     },
