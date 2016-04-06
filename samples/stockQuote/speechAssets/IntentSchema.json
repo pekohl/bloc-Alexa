@@ -5,7 +5,7 @@
       "slots": [
         {
           "name": "stockSymbol",
-          "type": "Stock_Symbol"
+          "type": "string"
         }
       ]
     },

@@ -36,7 +36,7 @@
 /**
  * App ID for the skill
  */
-var APP_ID = undefined; //replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
+var APP_ID = 'amzn1.echo-sdk-ams.app.35677929-49af-489d-b7b2-159fa590cb2f'; //replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
 var https = require('https');
 
@@ -167,21 +167,8 @@ function handleFirstQuoteRequest(intent, session, response) {
     var stockSlot = intent.slots.stockSymbol;
     console.log('intent.slots.stockSymbol: ' = stockSlot)
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
-//    var monthNames = ["January", "February", "March", "April", "May", "June",
-//                      "July", "August", "September", "October", "November", "December"
-//    ];
-    var sessionAttributes = {};
-    // Read the first 3 events, then set the count to 3
-    sessionAttributes.index = paginationSize;
-    var symbol = "";
 
-//    // If the user provides a date, then use that, otherwise use today
-//    // The date is in server time, not in the user's time zone. So "today" for the user may actually be tomorrow
-//    if (daySlot && daySlot.value) {
-//        date = new Date(daySlot.value);
-//    } else {
-//        date = new Date();
-//    }
+    var symbol = "";
 
     var prefixContent = "<p>For ticker: " + symbol + ", </p>";
     var cardContent = "For ticker:  " + symbol + ", ";
@@ -191,16 +178,15 @@ function handleFirstQuoteRequest(intent, session, response) {
     getJsonQuoteFromgoogle(stockSlot, function (priceDetails) {
         var speechText = "",
             i;
-//        sessionAttributes.text = priceDetails;
-//        session.attributes = sessionAttributes;
+
         if (priceDetails.length == 0) {
             speechText = "There is a problem connecting to Google at this time. Please try again later.";
             cardContent = speechText;
             response.tell(speechText);
         } else {
             for (i = 0; i < paginationSize; i++) {
-                cardContent = cardContent + priceDetails[i] + " ";
-                speechText = "<p>" + speechText + priceDetails[i] + "</p> ";
+                cardContent = cardContent + priceDetails[3] + " ";
+                speechText = "<p>" + speechText + priceDetails[3] + "</p> ";
             }
             speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
@@ -228,7 +214,7 @@ function handleNextQuoteRequest(intent, session, response) {
         repromptText = "Do you want to quote another?",
         i;
     if (!result) {
-        speechText = "With Stock Quote, you can get historical events for any day of the year.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
+        speechText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
         cardContent = speechText;
     } else if (sessionAttributes.index >= result.length) {
         speechText = "There is no info for this symbol. Try another by saying <break time = \"0.3s\"/> quote for A M Z N.";
@@ -279,39 +265,6 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
         console.log("Got error in getJsonQuoteFromgoogle: ", e);
     });
 }
-// do I really need this?
-//function parseJson(inputText) {
-//    // sizeOf (/nEvents/n) is 10
-//    var text = inputText.substring(inputText.indexOf("\\nEvents\\n")+10, inputText.indexOf("\\n\\n\\nBirths")),
-//        retArr = [],
-//        retString = "",
-//        endIndex,
-//        startIndex = 0;
-//
-//    if (text.length == 0) {
-//        return retArr;
-//    }
-//
-//    while(true) {
-//        endIndex = text.indexOf("\\n", startIndex+delimiterSize);
-//        var eventText = (endIndex == -1 ? text.substring(startIndex) : text.substring(startIndex, endIndex));
-//        // replace dashes returned in text from Wikipedia's API
-//        eventText = eventText.replace(/\\u2013\s*/g, '');
-//        // add comma after year so Alexa pauses before continuing with the sentence
-//        eventText = eventText.replace(/(^\d+)/,'$1,');
-//        eventText = 'In ' + eventText;
-//        startIndex = endIndex+delimiterSize;
-//        retArr.push(eventText);
-//        if (endIndex == -1) {
-//            break;
-//        }
-//    }
-//    if (retString != "") {
-//        retArr.push(retString);
-//    }
-//    retArr.reverse();
-//    return retArr;
-//}
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
