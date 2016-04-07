@@ -131,8 +131,8 @@ function handleFirstQuoteRequest(intent, session, response) {
     console.log("intent.slots.stockSymbol: " + stockSlot);
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 
-    var prefixContent = "<p>For ticker: " + stockSlot + ", </p>";
-    var cardContent = "For ticker:  " + stockSlot + ", ";
+    var prefixContent = "Current Price for: " + stockSlot;
+    var cardContent = "Current Price for: " + stockSlot;
 
     var cardTitle = "Current Price for: " + stockSlot;
 
@@ -149,8 +149,8 @@ function handleFirstQuoteRequest(intent, session, response) {
             cardContent = speechText;
             response.tell(speechText);
         } else {
-                cardContent = cardContent + priceDetails.lastPrice + " ";
-                speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + priceDetails.LastPrice;
+                cardContent = cardContent +" "+ lastPrice;
+                speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + lastPrice;
 
 //            speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
