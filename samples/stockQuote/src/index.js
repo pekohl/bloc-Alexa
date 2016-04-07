@@ -102,9 +102,6 @@ StockQuoteSkill.prototype.intentHandlers = {
         handleFirstQuoteRequest(intent, session, response);
     },
 
-    "GetNextQuoteIntent": function (intent, session, response) {
-        handleNextQuoteRequest(intent, session, response);
-    },
 
     "AMAZON.HelpIntent": function (intent, session, response) {
         var speechText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  " +
@@ -180,15 +177,14 @@ function handleFirstQuoteRequest(intent, session, response) {
             i;
 
         if (priceDetails.length == 0) {
-            speechText = "There is a problem connecting to Google at this time. Please try again later.";
+            speechText = "There is no info for this symbol. Try another by saying, <break time = \"0.3s\"/> QUOTE FOR,  <break time = \"0.3s\"/> and a new ticker symbol.";
             cardContent = speechText;
             response.tell(speechText);
         } else {
-//            for (i = 0; i < paginationSize; i++) {
                 cardContent = cardContent + priceDetails[0].l + " ";
                 speechText = "For ticker: <say-as interpret-as='characters'>" + stockSlot + "</say-as><break time='.681s'/> $" + priceDetails[0].l;
-//            }
-            speechText = speechText + " <p>Do you want to quote another?</p>";
+
+//            speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
                 speech: "<speak>" + speechText + "</speak>",
                 type: AlexaSkill.speechOutputType.SSML
@@ -205,44 +201,44 @@ function handleFirstQuoteRequest(intent, session, response) {
 /**
  * Gets a poster prepares the speech to reply to the user.
  */
-function handleNextQuoteRequest(intent, session, response) {
-    var cardTitle = "Stock quote ",
-        sessionAttributes = session.attributes,
-        result = sessionAttributes.text,
-        speechText = "",
-        cardContent = "",
-        repromptText = "Do you want to quote another?",
-        i;
-    if (!result) {
-        speechText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
-        cardContent = speechText;
-    } else if (sessionAttributes.index >= result.length) {
-        speechText = "There is no info for this symbol. Try another by saying <break time = \"0.3s\"/> quote for A M Z N.";
-        cardContent = "There is no info for this symbol. Try another by saying, quote for A M Z N.";
-    } else {
-        for (i = 0; i < paginationSize; i++) {
-            if (sessionAttributes.index>= result.length) {
-                break;
-            }
-            speechText = speechText + "<p>" + result[sessionAttributes.index] + "</p> ";
-            cardContent = cardContent + result[sessionAttributes.index] + " ";
-            sessionAttributes.index++;
-        }
-        if (sessionAttributes.index < result.length) {
-            speechText = speechText + " Wanna go deeper in history?";
-            cardContent = cardContent + " Wanna go deeper in history?";
-        }
-    }
-    var speechOutput = {
-        speech: "<speak>" + speechText + "</speak>",
-        type: AlexaSkill.speechOutputType.SSML
-    };
-    var repromptOutput = {
-        speech: repromptText,
-        type: AlexaSkill.speechOutputType.PLAIN_TEXT
-    };
-    response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
-}
+//function handleNextQuoteRequest(intent, session, response) {
+//    var cardTitle = "Stock quote ",
+//        sessionAttributes = session.attributes,
+//        result = sessionAttributes.text,
+//        speechText = "",
+//        cardContent = "",
+//        repromptText = "Do you want to quote another?",
+//        i;
+//    if (!result) {
+//        speechText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
+//        cardContent = speechText;
+//    } else if (sessionAttributes.index >= result.length) {
+//        speechText = "There is no info for this symbol. Try another by saying <break time = \"0.3s\"/> quote for A M Z N.";
+//        cardContent = "There is no info for this symbol. Try another by saying, quote for A M Z N.";
+//    } else {
+//        for (i = 0; i < paginationSize; i++) {
+//            if (sessionAttributes.index>= result.length) {
+//                break;
+//            }
+//            speechText = speechText + "<p>" + result[sessionAttributes.index] + "</p> ";
+//            cardContent = cardContent + result[sessionAttributes.index] + " ";
+//            sessionAttributes.index++;
+//        }
+//        if (sessionAttributes.index < result.length) {
+//            speechText = speechText + " Wanna go deeper in history?";
+//            cardContent = cardContent + " Wanna go deeper in history?";
+//        }
+//    }
+//    var speechOutput = {
+//        speech: "<speak>" + speechText + "</speak>",
+//        type: AlexaSkill.speechOutputType.SSML
+//    };
+//    var repromptOutput = {
+//        speech: repromptText,
+//        type: AlexaSkill.speechOutputType.PLAIN_TEXT
+//    };
+//    response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
+//}
 
 function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
     var url = urlPrefix + stockSymbol;
@@ -257,11 +253,9 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
         });
 
         res.on('end', function () {
-//           var re = /[\/]/g;
             console.log("priceDetails JSON parse2:" + body.substring(3,500));
             var priceDetails = JSON.parse(body.substring(3,500));
             console.log('priceDetails JSON parse: ' + priceDetails);
-//            var stringResult = parseJson(body);
 
             eventCallback(priceDetails);
         });
