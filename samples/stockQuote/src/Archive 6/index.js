@@ -48,7 +48,7 @@ var AlexaSkill = require('./AlexaSkill');
 /**
  * URL prefix to download history content from Wikipedia
  */
-var urlPrefix = 'http://www.google.com/finance/info?q=NSE:';
+var urlPrefix = 'http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=';
 // Alternate quote service: http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=ebay
 // google quote service: https://www.google.com/finance/info?q=NSE:
 
@@ -184,13 +184,13 @@ function handleFirstQuoteRequest(intent, session, response) {
             cardContent = speechText;
             response.tell(speechText);
         } else {
-//            for (i = 0; i < paginationSize; i++) {
-                cardContent = cardContent + priceDetails[0].l + " ";
-                speechText = "For ticker: <say-as interpret-as='characters'>" + stockSlot + "</say-as><break time='.681s'/> $" + priceDetails[0].l;
-//            }
+            for (i = 0; i < paginationSize; i++) {
+                cardContent = cardContent + priceDetails[3] + " ";
+                speechText = "<p>" + speechText + priceDetails[3] + "</p> ";
+            }
             speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
-                speech: "<speak>" + speechText + "</speak>",
+                speech: "<speak>" + prefixContent + speechText + "</speak>",
                 type: AlexaSkill.speechOutputType.SSML
             };
             var repromptOutput = {
@@ -247,19 +247,51 @@ function handleNextQuoteRequest(intent, session, response) {
 function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
     var url = urlPrefix + stockSymbol;
     console.log('getJsonQuoteFromgoogle called - ' + url);
-
     http.get(url, function(res) {
         var body = '';
 
         res.on('data', function (chunk) {
             body += chunk;
-            console.log("priceDetails JSON parse1:" + body.substring(3,500));
         });
 
         res.on('end', function () {
-//           var re = /[\/]/g;
-            console.log("priceDetails JSON parse2:" + body.substring(3,500));
-            var priceDetails = JSON.parse(body.substring(3,500));
+//            var str = '
+//
+//            // [
+//            {
+//            "id": "14135"
+//            ,"t" : "GE"
+//            ,"e" : "NYSE"
+//            ,"l" : "30.91"
+//            ,"l_fix" : "30.91"
+//            ,"l_cur" : "30.90"
+//            ,"s": "2"
+//            ,"ltt":"6:35PM EDT"
+//            ,"lt" : "Apr 6, 6:35PM EDT"
+//            ,"lt_dts" : "2016-04-06T18:35:25Z"
+//            ,"c" : "-0.07"
+//            ,"c_fix" : "-0.07"
+//            ,"cp" : "-0.24"
+//            ,"cp_fix" : "-0.24"
+//            ,"ccol" : "chr"
+//            ,"pcls_fix" : "30.98"
+//            ,"el": "30.90"
+//            ,"el_fix": "30.90"
+//            ,"el_cur": "30.90"
+//            ,"elt" : "Apr 6, 7:55PM EDT"
+//            ,"ec" : "-0.01"
+//            ,"ec_fix" : "-0.01"
+//            ,"ecp" : "-0.02"
+//            ,"ecp_fix" : "-0.02"
+//            ,"eccol" : "chr"
+//            ,"div" : "0.23"
+//            ,"yld" : "2.98"
+//            }
+//            ]
+//'
+            var re = /[\/]/g; 
+            console.log(body);
+            var priceDetails = JSON.parse(body);
             console.log('priceDetails JSON parse: ' + priceDetails);
 //            var stringResult = parseJson(body);
 
@@ -272,7 +304,7 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
-
+    
     var skill = new StockQuoteSkill();
     skill.execute(event, context);
 };

@@ -38,7 +38,7 @@
  */
 var APP_ID = 'amzn1.echo-sdk-ams.app.35677929-49af-489d-b7b2-159fa590cb2f'; //replace with 'amzn1.echo-sdk-ams.app.[your-unique-value-here]';
 
-var http = require('http');
+var https = require('https');
 
 /**
  * The AlexaSkill Module that has the AlexaSkill prototype and helper functions
@@ -48,9 +48,7 @@ var AlexaSkill = require('./AlexaSkill');
 /**
  * URL prefix to download history content from Wikipedia
  */
-var urlPrefix = 'http://www.google.com/finance/info?q=NSE:';
-// Alternate quote service: http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=ebay
-// google quote service: https://www.google.com/finance/info?q=NSE:
+var urlPrefix = 'https://www.google.com/finance/info?q=NSE:';
 
 /**
  * Variable defining number of events to be read at one time
@@ -184,13 +182,13 @@ function handleFirstQuoteRequest(intent, session, response) {
             cardContent = speechText;
             response.tell(speechText);
         } else {
-//            for (i = 0; i < paginationSize; i++) {
-                cardContent = cardContent + priceDetails[0].l + " ";
-                speechText = "For ticker: <say-as interpret-as='characters'>" + stockSlot + "</say-as><break time='.681s'/> $" + priceDetails[0].l;
-//            }
+            for (i = 0; i < paginationSize; i++) {
+                cardContent = cardContent + priceDetails[3] + " ";
+                speechText = "<p>" + speechText + priceDetails[3] + "</p> ";
+            }
             speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
-                speech: "<speak>" + speechText + "</speak>",
+                speech: "<speak>" + prefixContent + speechText + "</speak>",
                 type: AlexaSkill.speechOutputType.SSML
             };
             var repromptOutput = {
@@ -247,19 +245,17 @@ function handleNextQuoteRequest(intent, session, response) {
 function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
     var url = urlPrefix + stockSymbol;
     console.log('getJsonQuoteFromgoogle called - ' + url);
-
-    http.get(url, function(res) {
+    https.get(url, function(res) {
         var body = '';
 
         res.on('data', function (chunk) {
             body += chunk;
-            console.log("priceDetails JSON parse1:" + body.substring(3,500));
         });
 
         res.on('end', function () {
-//           var re = /[\/]/g;
-            console.log("priceDetails JSON parse2:" + body.substring(3,500));
-            var priceDetails = JSON.parse(body.substring(3,500));
+           var re = /[\/]/g; 
+            console.log(body.toString().replace(re,''));
+            var priceDetails = JSON.parse(body.toString().replace(re,'');
             console.log('priceDetails JSON parse: ' + priceDetails);
 //            var stringResult = parseJson(body);
 
@@ -272,7 +268,7 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
-
+    
     var skill = new StockQuoteSkill();
     skill.execute(event, context);
 };
