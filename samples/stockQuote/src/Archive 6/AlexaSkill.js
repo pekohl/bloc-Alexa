@@ -178,7 +178,7 @@ Response.prototype = (function () {
                 session: this._session,
                 output: speechOutput,
                 reprompt: repromptSpeech,
-                shouldEndSession: true
+                shouldEndSession: false
             }));
         },
         askWithCard: function (speechOutput, repromptSpeech, cardTitle, cardContent) {
@@ -188,7 +188,7 @@ Response.prototype = (function () {
                 reprompt: repromptSpeech,
                 cardTitle: cardTitle,
                 cardContent: cardContent,
-                shouldEndSession: true
+                shouldEndSession: false
             }));
         }
     };
