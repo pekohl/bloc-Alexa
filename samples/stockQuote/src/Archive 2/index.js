@@ -139,18 +139,14 @@ function handleFirstQuoteRequest(intent, session, response) {
     getJsonQuoteFromgoogle(stockSlot, function (priceDetails) {
         var speechText = "",
             i;
-        var lastPrice = priceDetails.LastPrice;
-        var companyName = priceDetails.Name;
-        console.log("Last Price:" + lastPrice);
-        console.log("Comppany Name:" + companyName)
 
         if (priceDetails.length == 0) {
             speechText = "There is no info for this symbol. Try another by saying, <break time = \"0.3s\"/> QUOTE FOR,  <break time = \"0.3s\"/> and a new ticker symbol.";
             cardContent = speechText;
             response.tell(speechText);
         } else {
-                cardContent = cardContent + priceDetails.lastPrice + " ";
-                speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + priceDetails.LastPrice;
+                cardContent = cardContent + priceDetails.LastPrice + " ";
+                speechText = "Current price for: <say-as interpret-as='characters'>" + stockSlot + "</say-as><break time='.681s'/> $" + priceDetails.LastPrice;
 
 //            speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
