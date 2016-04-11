@@ -26,6 +26,14 @@ var http = require('http');
 
 var AlexaSkill = require('./AlexaSkill');
 
+// Google anayltics
+var ua = require('universal-analytics');
+var visitor = ua('UA-76128849-1');
+visitor.pageview("/").send();
+
+
+
+
 /**
  * URL prefix to look up stock information
  */
@@ -80,6 +88,7 @@ StockQuoteSkill.prototype.intentHandlers = {
             speech: repromptText,
             type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = false;
         response.ask(speechOutput, repromptOutput);
     },
 
@@ -88,6 +97,7 @@ StockQuoteSkill.prototype.intentHandlers = {
                 speech: "Goodbye",
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = true;
         response.tell(speechOutput);
     },
 
@@ -96,6 +106,7 @@ StockQuoteSkill.prototype.intentHandlers = {
                 speech: "Goodbye",
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = true;
         response.tell(speechOutput);
     }
 };
@@ -120,6 +131,7 @@ function getWelcomeResponse(response) {
         speech: repromptText,
         type: AlexaSkill.speechOutputType.PLAIN_TEXT
     };
+    session.shouldEndSession = false;
     response.askWithCard(speechOutput, repromptOutput, cardTitle, cardOutput);
 }
 
@@ -129,6 +141,10 @@ function getWelcomeResponse(response) {
 function handleFirstQuoteRequest(intent, session, response) {
     var stockSlot = intent.slots.stockSymbol.value;
     console.log("intent.slots.stockSymbol: " + stockSlot);
+    stockSlot = stockSlot.replace(/([.])+/g,'');
+    stockSlot = stockSlot.replace(/([" "])+/g,'');
+    console.log("stockSymbol after strip: " + stockSlot);
+
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 
     var prefixContent = "Current Price for: " + stockSlot;
@@ -141,6 +157,9 @@ function handleFirstQuoteRequest(intent, session, response) {
             i;
         var lastPrice = priceDetails.LastPrice;
         var companyName = priceDetails.Name;
+        // Stip out any & which are incomatibale with SSML
+        companyName = companyName.replace(/([&])+/g,'and');
+
         console.log("Last Price:" + lastPrice);
         console.log("Comppany Name:" + companyName)
 
@@ -161,6 +180,7 @@ function handleFirstQuoteRequest(intent, session, response) {
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
             };
+            session.shouldEndSession = false;
             response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
         }
     });
