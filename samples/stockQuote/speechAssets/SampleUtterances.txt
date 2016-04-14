@@ -1,18 +1,9 @@
-GetStockQuoteIntent get quote for {AMZN|stockSymbol}
-GetStockQuoteIntent give me quote for {AMZN|stockSymbol}
-GetStockQuoteIntent quote for {AMZN|stockSymbol}
-GetStockQuoteIntent give me a quote for {AMZN|stockSymbol}
-GetStockQuoteIntent what's the price of {AMZN|stockSymbol}
-GetStockQuoteIntent {AMZN|stockSymbol}
-
-GetStockQuoteIntent get quote for {a. m. z. n.|stockSymbol}
-GetStockQuoteIntent give me quote for {a. m. z. n.|stockSymbol}
-GetStockQuoteIntent quote for {a. m. z. n.|stockSymbol}
-GetStockQuoteIntent give me a quote for {a. m. z. n.|stockSymbol}
-GetStockQuoteIntent what's the price of {a. m. z. n.|stockSymbol}
-GetStockQuoteIntent {a. m. z. n.|stockSymbol}
-
-
+GetStockQuoteIntent get quote for {stockSymbol}
+GetStockQuoteIntent give me quote for {stockSymbol}
+GetStockQuoteIntent quote for {stockSymbol}
+GetStockQuoteIntent give me a quote for {stockSymbol}
+GetStockQuoteIntent what's the price of {stockSymbol}
+GetStockQuoteIntent {stockSymbol}
 
 GetNextQuoteIntent yes
 GetNextQuoteIntent yup
