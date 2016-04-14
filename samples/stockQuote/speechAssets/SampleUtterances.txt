@@ -3,6 +3,11 @@ GetStockQuoteIntent give me quote for {stockSymbol}
 GetStockQuoteIntent quote for {stockSymbol}
 GetStockQuoteIntent give me a quote for {stockSymbol}
 GetStockQuoteIntent what's the price of {stockSymbol}
+GetStockQuoteIntent ask stock quote to get quote for {stockSymbol}
+GetStockQuoteIntent ask stock quote for the price of {stockSymbol}
+GetStockQuoteIntent tell stock quote to get quote for {stockSymbol}
+GetStockQuoteIntent tell stock quote to get the price for {stockSymbol}
+GetStockQuoteIntent tell stock quote to get price for {stockSymbol}
 GetStockQuoteIntent {stockSymbol}
 
 GetNextQuoteIntent yes

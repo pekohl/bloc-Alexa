@@ -157,18 +157,18 @@ function handleFirstQuoteRequest(intent, session, response) {
             i;
         var lastPrice = priceDetails.LastPrice;
         var companyName = priceDetails.Name;
-        // Stip out any & which are incomatibale with SSML
-        companyName = companyName.replace(/([&])+/g,'and');
-
         console.log("Last Price:" + lastPrice);
         console.log("Comppany Name:" + companyName)
 
-        if (priceDetails.length == 0) {
-            speechText = "There is no info for this symbol. Try another by saying, <break time = \"0.3s\"/> QUOTE FOR,  <break time = \"0.3s\"/> and a new ticker symbol.";
+        if (typeof lastPrice === "undefined") {
+            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as AAPL or AMZN.";
             cardContent = speechText;
             response.tell(speechText);
         } else {
                 cardContent = cardContent +" "+ lastPrice;
+                var companyName = priceDetails.Name;
+                // Stip out any & which are incomatibale with SSML
+                companyName = companyName.replace(/([&])+/g,'and');
                 speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + lastPrice;
 
 //            speechText = speechText + " <p>Do you want to quote another?</p>";
