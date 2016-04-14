@@ -26,12 +26,20 @@ var http = require('http');
 
 var AlexaSkill = require('./AlexaSkill');
 
+// Google anayltics
+var ua = require('universal-analytics');
+var visitor = ua('UA-76128849-1');
+visitor.pageview("/").send();
+
+
+
+
 /**
  * URL prefix to look up stock information
  */
-var urlPrefix = 'http://www.google.com/finance/info?q=NSE:';
-// Alternate quote service: http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=ebay
-// google quote service: https://www.google.com/finance/info?q=NSE:
+var urlPrefix = 'http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=';
+// Alternate quote service: http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=ebay
+// google quote service: http://www.google.com/finance/info?q=NSE:
 
 
 var StockQuoteSkill = function() {
@@ -80,6 +88,7 @@ StockQuoteSkill.prototype.intentHandlers = {
             speech: repromptText,
             type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = false;
         response.ask(speechOutput, repromptOutput);
     },
 
@@ -88,6 +97,7 @@ StockQuoteSkill.prototype.intentHandlers = {
                 speech: "Goodbye",
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = true;
         response.tell(speechOutput);
     },
 
@@ -96,6 +106,7 @@ StockQuoteSkill.prototype.intentHandlers = {
                 speech: "Goodbye",
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };
+        session.shouldEndSession = true;
         response.tell(speechOutput);
     }
 };
@@ -120,6 +131,7 @@ function getWelcomeResponse(response) {
         speech: repromptText,
         type: AlexaSkill.speechOutputType.PLAIN_TEXT
     };
+    session.shouldEndSession = false;
     response.askWithCard(speechOutput, repromptOutput, cardTitle, cardOutput);
 }
 
@@ -129,24 +141,35 @@ function getWelcomeResponse(response) {
 function handleFirstQuoteRequest(intent, session, response) {
     var stockSlot = intent.slots.stockSymbol.value;
     console.log("intent.slots.stockSymbol: " + stockSlot);
+    stockSlot = stockSlot.replace(/([.])+/g,'');
+    stockSlot = stockSlot.replace(/([" "])+/g,'');
+    console.log("stockSymbol after strip: " + stockSlot);
+
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 
-    var prefixContent = "<p>For ticker: " + stockSlot + ", </p>";
-    var cardContent = "For ticker:  " + stockSlot + ", ";
+    var prefixContent = "Current Price for: " + stockSlot;
+    var cardContent = "Current Price for: " + stockSlot;
 
     var cardTitle = "Current Price for: " + stockSlot;
 
     getJsonQuoteFromgoogle(stockSlot, function (priceDetails) {
         var speechText = "",
             i;
+        var lastPrice = priceDetails.LastPrice;
+        var companyName = priceDetails.Name;
+        console.log("Last Price:" + lastPrice);
+        console.log("Comppany Name:" + companyName)
 
-        if (priceDetails.length == 0) {
-            speechText = "There is no info for this symbol. Try another by saying, <break time = \"0.3s\"/> QUOTE FOR,  <break time = \"0.3s\"/> and a new ticker symbol.";
+        if (typeof lastPrice === "undefined") {
+            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as AAPL or AMZN.";
             cardContent = speechText;
             response.tell(speechText);
         } else {
-                cardContent = cardContent + priceDetails[0].l + " ";
-                speechText = "For ticker: <say-as interpret-as='characters'>" + stockSlot + "</say-as><break time='.681s'/> $" + priceDetails[0].l;
+                cardContent = cardContent +" "+ lastPrice;
+                var companyName = priceDetails.Name;
+                // Stip out any & which are incomatibale with SSML
+                companyName = companyName.replace(/([&])+/g,'and');
+                speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + lastPrice;
 
 //            speechText = speechText + " <p>Do you want to quote another?</p>";
             var speechOutput = {
@@ -157,6 +180,7 @@ function handleFirstQuoteRequest(intent, session, response) {
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
             };
+            session.shouldEndSession = false;
             response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
         }
     });
@@ -175,7 +199,7 @@ function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
         });
 
         res.on('end', function () {
-            var priceDetails = JSON.parse(body.substring(3,500));
+            var priceDetails = JSON.parse(body);
             console.log('priceDetails JSON parse: ' + priceDetails);
 
             eventCallback(priceDetails);
