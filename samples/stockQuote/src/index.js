@@ -72,7 +72,15 @@ StockQuoteSkill.prototype.eventHandlers.onSessionEnded = function (sessionEndedR
 StockQuoteSkill.prototype.intentHandlers = {
 
     "GetStockQuoteIntent": function (intent, session, response) {
-        handleFirstQuoteRequest(intent, session, response);
+        var ticker = intent.slots.stockSymbol.value;
+        console.log("GetStockQuoteIntent.ticker: " + ticker);
+        if (typeof ticker == 'undefined') {
+            console.log("GetWelcomeResponse triggered");
+            getWelcomeResponse(response);
+        } else {
+            console.log("HandleFirstQuote triggered");
+            handleFirstQuoteRequest(intent, session, response);
+        }
     },
 
 
@@ -118,8 +126,8 @@ StockQuoteSkill.prototype.intentHandlers = {
 function getWelcomeResponse(response) {
     var cardTitle = "Stock Quote";
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
-    var speechText = "<p>Stock Quote.</p> <p>What symbol would you like to quote?</p>";
-    var cardOutput = "Stock Quote. What symbol do you want to quote?";
+    var speechText = "<p>Stock Quote.</p> <p>Please tell me what symbol you would like to quote?</p>";
+    var cardOutput = "Plese tell me what symbol you would like to quote?";
     // If the user either does not reply to the welcome message or says something that is not
     // understood, they will be prompted again with this text.
 
@@ -131,7 +139,7 @@ function getWelcomeResponse(response) {
         speech: repromptText,
         type: AlexaSkill.speechOutputType.PLAIN_TEXT
     };
-    session.shouldEndSession = false;
+    // session.shouldEndSession = false;
     response.askWithCard(speechOutput, repromptOutput, cardTitle, cardOutput);
 }
 
@@ -139,11 +147,14 @@ function getWelcomeResponse(response) {
  * Gets a poster prepares the speech to reply to the user.
  */
 function handleFirstQuoteRequest(intent, session, response) {
+    // Get ticker from intent
     var stockSlot = intent.slots.stockSymbol.value;
-    console.log("intent.slots.stockSymbol: " + stockSlot);
-    stockSlot = stockSlot.replace(/([.])+/g,'');
-    stockSlot = stockSlot.replace(/([" "])+/g,'');
-    console.log("stockSymbol after strip: " + stockSlot);
+    console.log("handleFirstQuoteRequest.stockSlot: " + stockSlot);
+
+    // Stip out any illegal characters
+    //stockSlot = stockSlot.replace(/([.])+/g,'');
+    //stockSlot = stockSlot.replace(/([" "])+/g,'');
+    console.log("stockSlot after strip: " + stockSlot);
 
     var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 
@@ -161,17 +172,18 @@ function handleFirstQuoteRequest(intent, session, response) {
         console.log("Comppany Name:" + companyName)
 
         if (typeof lastPrice === "undefined") {
-            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as AAPL or AMZN.";
+            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as <break time = \"0.3s\"/> A. A. P. L. <break time = \"0.3s\"/> or <break time = \"0.3s\"/> E. B. A. Y.";
             cardContent = speechText;
             response.tell(speechText);
+            session.shouldEndSession = false;
         } else {
                 cardContent = cardContent +" "+ lastPrice;
-                var companyName = priceDetails.Name;
+
                 // Stip out any & which are incomatibale with SSML
                 companyName = companyName.replace(/([&])+/g,'and');
                 speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + lastPrice;
 
-//            speechText = speechText + " <p>Do you want to quote another?</p>";
+            speechText = speechText + " <p>If you would like to quote another, just say the symbol. Otherwise you can say 'EXIT' to leave.</p>";
             var speechOutput = {
                 speech: "<speak>" + speechText + "</speak>",
                 type: AlexaSkill.speechOutputType.SSML
@@ -183,7 +195,21 @@ function handleFirstQuoteRequest(intent, session, response) {
             session.shouldEndSession = false;
             response.askWithCard(speechOutput, repromptOutput, cardTitle, cardContent);
         }
+
     });
+}
+
+function handleNoStockRequest(intent, session, response) {
+    if (session.attributes.stockSlot) {
+        // get date re-prompt
+        var repromptText = "Please try again saying a day of the week, for example, Saturday. ";
+        var speechOutput = repromptText;
+
+        response.ask(speechOutput, repromptText);
+    } else {
+        // get Welcome response
+        getWelcomeResponse(response);
+    }
 }
 
 
