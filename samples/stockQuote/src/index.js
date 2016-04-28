@@ -20,6 +20,7 @@
 /**
  * App ID for the skill
  */
+
 var APP_ID = 'amzn1.echo-sdk-ams.app.35677929-49af-489d-b7b2-159fa590cb2f';
 
 var http = require('http');
@@ -32,12 +33,11 @@ var visitor = ua('UA-76128849-1');
 visitor.pageview("/").send();
 
 
-
-
 /**
  * URL prefix to look up stock information
  */
-var urlPrefix = 'http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=';
+var urlPrefix = 'http://www.google.com/finance/info?q=NSE:';
+// XML URL: 'http://ws.cdyne.com/delayedstockquote/delayedstockquote.asmx/GetQuote?StockSymbol=';
 // Alternate quote service: http://dev.markitondemand.com/MODApis/Api/v2/Quote/json?symbol=ebay
 // google quote service: http://www.google.com/finance/info?q=NSE:
 
@@ -125,7 +125,7 @@ StockQuoteSkill.prototype.intentHandlers = {
 
 function getWelcomeResponse(response) {
     var cardTitle = "Stock Quote";
-    var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
+    var repromptText = "Stock quote can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
     var speechText = "<p>Stock Quote.</p> <p>Please tell me what symbol you would like to quote?</p>";
     var cardOutput = "Plese tell me what symbol you would like to quote?";
     // If the user either does not reply to the welcome message or says something that is not
@@ -152,38 +152,48 @@ function handleFirstQuoteRequest(intent, session, response) {
     console.log("handleFirstQuoteRequest.stockSlot: " + stockSlot);
 
     // Stip out any illegal characters
-    //stockSlot = stockSlot.replace(/([.])+/g,'');
-    //stockSlot = stockSlot.replace(/([" "])+/g,'');
+//    stockSlot = stockSlot.replace(/([.])+/g,'');
+//    stockSlot = stockSlot.replace(/([" "])+/g,'');
     console.log("stockSlot after strip: " + stockSlot);
 
-    var repromptText = "With Stock Quote, you can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
+    var repromptText = "Stock quote can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
 
     var prefixContent = "Current Price for: " + stockSlot;
     var cardContent = "Current Price for: " + stockSlot;
-
     var cardTitle = "Current Price for: " + stockSlot;
 
-    getJsonQuoteFromgoogle(stockSlot, function (priceDetails) {
+    getJsonQuote(stockSlot, function (priceDetails) {
         var speechText = "",
             i;
-        var lastPrice = priceDetails.LastPrice;
-        var companyName = priceDetails.Name;
+        var lastPrice = priceDetails.l;
+        //var companyName = priceDetails.Name;
         console.log("Last Price:" + lastPrice);
-        console.log("Comppany Name:" + companyName)
+        //console.log("Comppany Name:" + companyName)
 
-        if (typeof lastPrice === "undefined") {
-            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as <break time = \"0.3s\"/> A. A. P. L. <break time = \"0.3s\"/> or <break time = \"0.3s\"/> E. B. A. Y.";
+        if (priceDetails == "undefined") {
+            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as <break time = \"0.3s\"/>A. A. P. L. <break time = \"0.3s\"/> or <break time = \"0.3s\"/> E. B. A. Y.";
             cardContent = speechText;
-            response.tell(speechText);
+
+            var speechOutput = {
+                speech: "<speak>" + speechText + "</speak>",
+                type: AlexaSkill.speechOutputType.SSML
+            };
+            var repromptOutput = {
+                speech: repromptText,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
             session.shouldEndSession = false;
+            response.ask(speechOutput, repromptOutput, cardTitle, cardContent);
+
         } else {
-                cardContent = cardContent +" "+ lastPrice;
+            cardContent = cardContent +" "+ lastPrice;
 
-                // Stip out any & which are incomatibale with SSML
-                companyName = companyName.replace(/([&])+/g,'and');
-                speechText = "Current price for: <say-as>" + companyName + "</say-as><break time='.681s'/> $" + lastPrice;
+            // Stip out any & which are incomatibale with SSML
+            //companyName = companyName.replace(/([&])+/g,'and');
+            speechText = "Current price for: <say-as interpret-as='spell-out'>" + stockSlot + "</say-as> <break time='.681s'/> is <break time='.681s'/> $" + lastPrice;
 
-            speechText = speechText + " <p>If you would like to quote another, just say the symbol. Otherwise you can say 'EXIT' to leave.</p>";
+            speechText = speechText + " <p>If you would like to quote another, just say the symbol. Otherwise you can say 'EXIT'.</p>";
+
             var speechOutput = {
                 speech: "<speak>" + speechText + "</speak>",
                 type: AlexaSkill.speechOutputType.SSML
@@ -213,27 +223,40 @@ function handleNoStockRequest(intent, session, response) {
 }
 
 
-function getJsonQuoteFromgoogle(stockSymbol, eventCallback) {
+function getJsonQuote(stockSymbol, eventCallback) {
+    var priceDetails = "undefined";
+    console.log('priceDetails: ' + priceDetails);
     var url = urlPrefix + stockSymbol;
-    console.log('getJsonQuoteFromgoogle called - ' + url);
+    console.log('getJsonQuote URL: ' + url);
 
     http.get(url, function(res) {
-        var body = '';
+        var body = [];
 
         res.on('data', function (chunk) {
             body += chunk;
         });
 
         res.on('end', function () {
-            var priceDetails = JSON.parse(body);
-            console.log('priceDetails JSON parse: ' + priceDetails);
-
-            eventCallback(priceDetails);
+            console.log(`Got response: ${res.statusCode}`);
+            console.log('getJsonQuote.body: ' + body);
+            if (res.statusCode == 200) {
+                 // Trim response from google to get JSON
+                body = body.slice(5);
+                console.log('Body after slice: ' + body);
+                body = body.replace(/\]/,"");
+                console.log('body after replace: ' + body);
+                priceDetails = JSON.parse(body);
+                console.log('priceDetails JSON parse: ' + priceDetails);
+                eventCallback(priceDetails);
+            } else {
+                eventCallback(priceDetails);
+            }
         });
     }).on('error', function (e) {
-        console.log("Got error in getJsonQuoteFromgoogle: ", e);
+        console.log("Got error in getJsonQuote: ", e);
     });
 }
+
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
