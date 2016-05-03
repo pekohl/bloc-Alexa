@@ -151,9 +151,9 @@ function handleFirstQuoteRequest(intent, session, response) {
     var stockSlot = intent.slots.stockSymbol.value;
     console.log("handleFirstQuoteRequest.stockSlot: " + stockSlot);
 
-    // Stip out any illegal characters
-//    stockSlot = stockSlot.replace(/([.])+/g,'');
-//    stockSlot = stockSlot.replace(/([" "])+/g,'');
+    //Stip out any illegal characters
+    stockSlot = stockSlot.replace(/([.])+/g,'');
+    stockSlot = stockSlot.replace(/([" "])+/g,'');
     console.log("stockSlot after strip: " + stockSlot);
 
     var repromptText = "Stock quote can get current stock quotes for companies listed on the New York Stock Exchange. Quotes may be delayed up to 20 minutes.  For example, you could say A M Z N, or G O O G, or you can say exit. Now, which symbol do you want to quote?";
@@ -171,7 +171,7 @@ function handleFirstQuoteRequest(intent, session, response) {
         //console.log("Comppany Name:" + companyName)
 
         if (priceDetails == "undefined") {
-            speechText = "There is no info for this symbol, <break time = \"0.3s\"/> please try another such as <break time = \"0.3s\"/>A. A. P. L. <break time = \"0.3s\"/> or <break time = \"0.3s\"/> E. B. A. Y.";
+            speechText = "There is no info for this symbol or it is invalid, <break time = \"0.3s\"/> please try another such as <break time = \"0.3s\"/>A. A. P. L. <break time = \"0.3s\"/> or <break time = \"0.3s\"/> E. B. A. Y.";
             cardContent = speechText;
 
             var speechOutput = {
